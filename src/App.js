@@ -74,7 +74,7 @@ class App extends Component {
         <h1>Iqbal</h1>
         <button 
         style={style}
-        onClick={this.userNameChangedHandler}>Switch Name</button>
+        onClick={this.userNameChangedHandler}>Toggle Persons</button>
         {persons}
       </div>
     );
