@@ -63,20 +63,12 @@ class App extends Component {
     
     
     return (
-<<<<<<< HEAD:src/App.js
-      <div className="App">
-        <h1>Iqbal</h1>
-        <button 
-        style={style}
-        onClick={this.userNameChangedHandler}>Toggle Persons</button>
-=======
       
       <div className={styles.App}>
         <Cockpit 
           showPersons = {this.state.showPerson}
           persons = {this.state.persons}
           click = {this.userNameChangedHandler} />
->>>>>>> section-5:src/containers/App.js
         {persons}
       </div>
 
