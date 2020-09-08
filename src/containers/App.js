@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
-import './App.css';
-import Person from './Person/Person'
+import styles from './App.module.css';
+import Persons from '../components/Persons/Persons'
+import Cockpit from '../components/Cockpit/Cockpit'
 
 class App extends Component {
   state = {
@@ -46,37 +47,39 @@ class App extends Component {
   }
 
   render() {
-    const style = {
-      backgroundColor: 'white',
-      font: 'inherit',
-      border: '1px solid blue',
-      padding: '8px',
-      cursor: 'pointer'
-    }
     let persons = null 
 
     if (this.state.showPerson) {
       persons = (
         <div>
-          {this.state.persons.map((person, index) => {
-            return <Person 
-            click={this.deleteNameHandler.bind(index)}
-            name={person.name}
-            age={person.age}
-            key={person.id}
-            change={(event) => this.changedNameHandler(event, person.id)} />
-          })}    
+          <Persons 
+            persons={this.state.persons}
+            clicked={this.deleteNameHandler}
+            changed={this.changedNameHandler} />   
         </div>
       )
     }
+
+    
+    
     return (
+<<<<<<< HEAD:src/App.js
       <div className="App">
         <h1>Iqbal</h1>
         <button 
         style={style}
         onClick={this.userNameChangedHandler}>Toggle Persons</button>
+=======
+      
+      <div className={styles.App}>
+        <Cockpit 
+          showPersons = {this.state.showPerson}
+          persons = {this.state.persons}
+          click = {this.userNameChangedHandler} />
+>>>>>>> section-5:src/containers/App.js
         {persons}
       </div>
+
     );
   }
 }
