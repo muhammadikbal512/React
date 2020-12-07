@@ -1,18 +1,35 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import styles from './App.module.css';
 import Persons from '../components/Persons/Persons'
 import Cockpit from '../components/Cockpit/Cockpit'
+import withClass from '../hoc/withClass'
+import AuthContext from '../context/auth-context'
 
 class App extends Component {
+  // constructor(props) {
+  //   super(props)
+  //   console.log('[App.js] constructor')
+  // }
   state = {
     persons : [
-      {id : "asd12ds", name : "iqbal", age: "21"},
-      {id : "asd12xc", name : "Ditlan", age: "23"},
-      {id : "asd13as", name : "Angga", age: "22"},
+      {id : "asd12ds", name : "iqbal", age: 21},
+      {id : "asd12xc", name : "Ditlan", age: 23},
+      {id : "asd13as", name : "Angga", age: 22},
     ],
-    showPerson: false
+    showPerson: false,
+    showCockpit: true,
+    changeCounter: 0,
+    authenticated: false
   }
 
+  // static getDerivedStateFromProps(props, state) {
+  //   console.log('[App.js] getDerivedStateFromProps', props)
+  //   return state;
+  // }
+
+  // componentDidMount() {
+  //   console.log('[App.js] componentDidMount')
+  // }
 
   changedNameHandler = (event, id) => {
 
@@ -29,14 +46,34 @@ class App extends Component {
     const persons = [...this.state.persons]
     persons[personIndex] = person;
 
-    this.setState({persons : persons})
+    this.setState((prevState, props) => {
+      return {
+        persons : persons,
+        changeCounter : prevState.changeCounter + 1
+      }
+    })
   }
+
+ 
+
+  // shouldComponentUpdate(nextProps, nextState) {
+  //   console.log('[App.js] shouldComponentUpdate')
+  //   return true;
+  // }
+
+  // componentDidUpdate() {
+  //   console.log('[App.js] componentDidUpdate')
+  // }
 
   deleteNameHandler = (personIndex) => {
     // const persons = this.state.persons.slice();
     const persons = [...this.state.persons]
     persons.splice(personIndex, 1);
     this.setState({persons : persons})
+  }
+
+  loginHandler = () => {
+    this.setState({authenticated: true})
   }
 
   userNameChangedHandler = () => {
@@ -47,6 +84,7 @@ class App extends Component {
   }
 
   render() {
+    // console.log('[App.js] render')
     let persons = null 
 
     if (this.state.showPerson) {
@@ -55,7 +93,8 @@ class App extends Component {
           <Persons 
             persons={this.state.persons}
             clicked={this.deleteNameHandler}
-            changed={this.changedNameHandler} />   
+            changed={this.changedNameHandler}
+            isAuthenticated={this.state.authenticated} />   
         </div>
       )
     }
@@ -64,17 +103,25 @@ class App extends Component {
     
     return (
       
-      <div className={styles.App}>
-        <Cockpit 
+      <Fragment>
+        <button onClick={() => {this.setState({showCockpit : false})}}>Remove Cockpit</button>
+        
+        <AuthContext.Provider value={{authenticated: this.state.authenticated, login: this.loginHandler}}>
+        { this.state.showCockpit ? 
+        (<Cockpit 
           title = {this.props.appTitle}
           showPersons = {this.state.showPerson}
-          persons = {this.state.persons}
-          click = {this.userNameChangedHandler} />
+          personLength = {this.state.persons.length}
+          click = {this.userNameChangedHandler} 
+          />
+        ): null }
         {persons}
-      </div>
+        </AuthContext.Provider>
+
+      </Fragment>
 
     );
   }
 }
 
-export default App;
+export default withClass(App, styles.App);
